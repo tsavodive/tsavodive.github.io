@@ -232,8 +232,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-
   const img = document.getElementById('avatarImg');
   img.addEventListener('error', () => {
     img.hidden = true;
@@ -247,25 +245,44 @@
     setTimeout(() => toast.classList.remove('show'), 1800);
   };
 
-  document.getElementById('shareBtn').addEventListener('click', async () => {
+  // 클립보드 복사 (https가 아니거나 권한이 막힌 환경에서도 동작하도록 2단계)
+  async function copyText(text){
     try {
-      if (navigator.share) { await navigator.share({ title: document.title, url: location.href }); return; }
-      await navigator.clipboard.writeText(location.href);
-      showToast('주소를 복사했습니다');
-    } catch (e) {
-      if (e.name !== 'AbortError') showToast('주소 복사에 실패했습니다');
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (e) { /* 아래 방식으로 재시도 */ }
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-1000px;opacity:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) { return false; }
+  }
+
+  // 공유: 모바일은 공유 시트, PC는 주소 복사
+  document.getElementById('shareBtn').addEventListener('click', async () => {
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+    if (isTouch && navigator.share) {
+      try { await navigator.share({ title: document.title, url: location.href }); return; }
+      catch (e) { if (e.name === 'AbortError') return; }
     }
+    const ok = await copyText(location.href);
+    showToast(ok ? '주소를 복사했습니다' : '주소창의 주소를 복사해 주세요');
   });
 
+  // 이메일: 클릭하면 메일 앱, 우클릭(길게 누르기)하면 주소만 복사
   const mail = document.getElementById('mailLink');
   mail.addEventListener('contextmenu', async (e) => {
     e.preventDefault();
-    try {
-      await navigator.clipboard.writeText(mail.getAttribute('href').replace('mailto:', ''));
-      showToast('이메일 주소를 복사했습니다');
-    } catch (err) {
-      showToast('복사에 실패했습니다');
-    }
+    const ok = await copyText(mail.getAttribute('href').replace('mailto:', ''));
+    showToast(ok ? '이메일 주소를 복사했습니다' : '주소 복사에 실패했습니다');
   });
 </script>
 </body>

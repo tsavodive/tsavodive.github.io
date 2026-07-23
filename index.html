@@ -1,68 +1,272 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내 프로필</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f3f4f6;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-        .profile-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #ffffff;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-top: 15px;
-            color: #111827;
-        }
-        .bio {
-            color: #6b7280;
-            margin-bottom: 30px;
-        }
-        .link-button {
-            display: block;
-            background-color: #ffffff;
-            color: #1f2937;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-        .link-button:hover {
-            transform: translateY(-2px);
-            background-color: #f9fafb;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <img src="프로필_이미지_주소.jpg" alt="프로필 사진" class="profile-img">
-        <div class="name">나의 이름 또는 닉네임</div>
-        <div class="bio">간단한 소개글을 작성해보세요</div>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F4E7D6">
 
-        <a href="링크1_URL" class="link-button">블로그 방문하기</a>
-        <a href="링크2_URL" class="link-button">인스타그램</a>
-        <a href="링크3_URL" class="link-button">이메일 보내기</a>
+<!-- ▼▼▼ 제목 / 설명 / 공유 미리보기 ▼▼▼ -->
+<title>이미린 Miline LEE </title>
+<meta name="description" content="🧵손으로 만들고 🌱기르는 사람">
+<meta property="og:type" content="website">
+<meta property="og:title" content="이미린">
+<meta property="og:description" content="🧵손으로 만들고 🌱기르는 사람">
+<meta property="og:image" content="profile.jpg">
+<!-- ▲▲▲ ▲▲▲ -->
+
+<link rel="icon" href="profile.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* ── 3중 구조 색 ── */
+    --page-top:#f8eee1;      /* 맨 뒤 배경 : 위 (밝게) */
+    --page-bottom:#ddc6ab;   /* 맨 뒤 배경 : 아래 (진하게) */
+    --ring:#fbf6f0;          /* 내용화면을 감싸는 테두리 */
+    --sheet:#f4e7d6;         /* 내용화면 (단색) */
+
+    --block:#ffffff;         /* 링크 버튼 */
+    --ink:#3a2a21;
+    --muted:#8b7466;
+    --accent:#b3653c;
+    --shadow:0 2px 10px rgba(90,60,40,.10);
+    --shape:14px;
+    --link-width:350px;      /* 링크 버튼 최대 폭 */
+    --font:"IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, system-ui,
+           "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{height:100%;}
+  body{
+    margin:0;
+    min-height:100%;
+    font-family:var(--font);
+    color:var(--ink);
+    background:linear-gradient(180deg, var(--page-top) 0%, var(--page-bottom) 100%) fixed;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* 내용화면 : 모바일은 화면 전체, PC는 모서리가 둥근 카드 */
+  .frame{
+    width:100%;
+    max-width:473px;
+    min-height:100vh;
+    margin:0 auto;
+    padding:20px 20px 44px;
+    display:flex;
+    flex-direction:column;
+    background:var(--sheet);
+  }
+  @media (min-width:768px){
+    body{padding:52px 16px;}
+    .frame{
+      min-height:calc(100vh - 104px);
+      padding:26px 30px 40px;
+      border-radius:44px;                    /* 위아래 모두 둥글게 */
+      box-shadow:0 0 0 14px var(--ring),     /* ← 감싸는 테두리 */
+                 0 14px 34px rgba(90,60,40,.18);
+    }
+  }
+
+  /* 상단 공유 버튼 */
+  .topbar{display:flex;justify-content:flex-start;}
+  .icon-btn{
+    width:38px;height:38px;
+    display:grid;place-items:center;
+    border:0;border-radius:50%;
+    background:#fff;
+    color:var(--ink);
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    transition:transform .15s ease, background .15s ease;
+  }
+  .icon-btn:hover{background:#fdf6ee;}
+  .icon-btn:active{transform:scale(.97);}
+  .icon-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+  .icon-btn svg{width:16px;height:16px;}
+
+  /* 프로필 */
+  .profile{text-align:center;margin-top:22px;}
+  .avatar{
+    width:90px;height:90px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:var(--shadow);
+    display:grid;place-items:center;
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+  .avatar .initial{font-size:34px;font-weight:600;color:var(--accent);}
+  .name{font-size:18px;font-weight:600;letter-spacing:-.01em;margin:0 0 8px;}
+  .tagline{margin:0;font-size:14px;font-weight:500;line-height:1.55;color:#5b4638;}
+  @media (min-width:768px){ .avatar{width:100px;height:100px;} }
+
+  /* 링크 버튼 */
+  .links{
+    list-style:none;
+    margin:26px auto 0;
+    padding:0;
+    width:100%;
+    max-width:var(--link-width);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .link{
+    display:block;
+    padding:16px 12px;
+    text-align:center;
+    background:var(--block);
+    border-radius:var(--shape);
+    box-shadow:var(--shadow);
+    color:var(--ink);
+    text-decoration:none;
+    font-size:15px;
+    font-weight:500;
+    line-height:1.45;
+    transition:transform .16s ease, box-shadow .16s ease;
+  }
+  .link:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(90,60,40,.16);}
+  .link:active{transform:scale(.99);}
+  .link:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+  /* 하단 이메일 */
+  .contact{margin-top:auto;padding-top:56px;text-align:center;}
+  .mail{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,.65);
+    color:var(--accent);
+    font-size:14px;
+    font-weight:500;
+    text-decoration:none;
+    transition:background .16s ease;
+  }
+  .mail:hover{background:rgba(255,255,255,.95);}
+  .mail:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+  .mail svg{width:15px;height:15px;flex:none;}
+  .copyright{margin:14px 0 0;font-size:12px;color:var(--muted);}
+
+  /* 등장 애니메이션 */
+  .fade{opacity:0;animation:rise .5s ease forwards;}
+  .fade:nth-child(1){animation-delay:.02s}
+  .fade:nth-child(2){animation-delay:.07s}
+  .fade:nth-child(3){animation-delay:.12s}
+  .fade:nth-child(4){animation-delay:.17s}
+  .fade:nth-child(5){animation-delay:.22s}
+  .fade:nth-child(6){animation-delay:.27s}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){
+    .fade{animation:none;opacity:1;}
+    .link,.icon-btn,.mail{transition:none;}
+  }
+
+  .toast{
+    position:fixed;left:50%;bottom:26px;
+    transform:translate(-50%,10px);
+    background:var(--ink);color:#fff;
+    font-size:13px;padding:10px 16px;border-radius:999px;
+    opacity:0;pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+</style>
+</head>
+
+<body>
+  <main class="frame">
+
+    <div class="topbar">
+      <button class="icon-btn" id="shareBtn" type="button" aria-label="이 페이지 공유하기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 15V4"/><path d="m7.5 8.5 4.5-4.5 4.5 4.5"/><path d="M4.5 13.5v5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5"/>
+        </svg>
+      </button>
     </div>
+
+    <!-- ▼▼▼ 프로필 ▼▼▼ -->
+    <section class="profile">
+      <div class="avatar fade">
+        <img src="profile.jpg" alt="프로필 사진" id="avatarImg">
+        <span class="initial" id="avatarFallback" hidden>이</span>
+      </div>
+      <h1 class="name fade">이미린</h1>
+      <p class="tagline fade">🧵손으로 만들고 🌱기르는 사람</p>
+    </section>
+    <!-- ▲▲▲ ▲▲▲ -->
+
+    <!-- ▼▼▼ 링크: <li> 한 덩어리가 버튼 하나 ▼▼▼ -->
+    <ul class="links">
+      <li class="fade">
+        <a class="link" href="https://blog.naver.com/leanonmii" target="_blank" rel="noopener">[개인] 네이버 블로그 : 일상, DIY, 육아 등</a>
+      </li>
+      <li class="fade">
+        <a class="link" href="https://tsavodive.github.io/dettakkt/" target="_blank" rel="noopener">[개인] 할일 관리용 웹앱 : 됐다끝dettakkt</a>
+      </li>
+      <li class="fade">
+        <a class="link" href="http://www.winlaw.co.kr/" target="_blank" rel="noopener">[직장] 법무법인 윈 (WIN) (현재 육아휴직중)</a>
+      </li>
+    </ul>
+    <!-- ▲▲▲ ▲▲▲ -->
+
+    <!-- ▼▼▼ 이메일: 아래 두 군데를 같은 주소로 ▼▼▼ -->
+    <section class="contact">
+      <a class="mail" id="mailLink" href="mailto:mln.lee@daum.net">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 6 8.5-6"/>
+        </svg>
+        mln.lee@daum.net
+      </a>
+    </section>
+    <!-- ▲▲▲ ▲▲▲ -->
+
+  </main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const img = document.getElementById('avatarImg');
+  img.addEventListener('error', () => {
+    img.hidden = true;
+    document.getElementById('avatarFallback').hidden = false;
+  });
+
+  const toast = document.getElementById('toast');
+  const showToast = (msg) => {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  };
+
+  document.getElementById('shareBtn').addEventListener('click', async () => {
+    try {
+      if (navigator.share) { await navigator.share({ title: document.title, url: location.href }); return; }
+      await navigator.clipboard.writeText(location.href);
+      showToast('주소를 복사했습니다');
+    } catch (e) {
+      if (e.name !== 'AbortError') showToast('주소 복사에 실패했습니다');
+    }
+  });
+
+  const mail = document.getElementById('mailLink');
+  mail.addEventListener('contextmenu', async (e) => {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(mail.getAttribute('href').replace('mailto:', ''));
+      showToast('이메일 주소를 복사했습니다');
+    } catch (err) {
+      showToast('복사에 실패했습니다');
+    }
+  });
+</script>
 </body>
 </html>
